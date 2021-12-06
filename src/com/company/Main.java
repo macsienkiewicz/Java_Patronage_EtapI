@@ -1,9 +1,9 @@
 package com.company;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class Main {
 
@@ -40,9 +40,9 @@ public class Main {
     public static void menu_save(Analyzer analyzer, File file) throws IOException {
         System.out.println("Do jakiego pliku chcesz zapisac wynik?");
         System.out.println("1 -> Domyslny plik .txt w tym samym folderze, gdzie znajduje sie analizowany plik");
-        System.out.println("2 -> Domyslny plik .xlsx w tym samym folderze, gdzie znajduje sie analizowany plik");
+        System.out.println("2 -> Domyslny plik .txt w tym samym folderze, gdzie znajduje sie analizowany plik wraz z plikiem .zip");
         System.out.println("3 -> Wlasny plik .txt");
-        System.out.println("4 -> Wlasny plik .xlsx");
+        System.out.println("4 -> Wlasny plik .txt wraz z plikiem .zip");
         Scanner scanner = new Scanner(System.in);
         int option = 0;
         try {
@@ -54,18 +54,17 @@ public class Main {
             menu_save(analyzer, file);
         }
         else if (option == 1) {
-            save_txt(analyzer,default_file_name(file, ".txt"));
+            save_txt(analyzer,default_file_name(file, ".txt"), false);
             menu_start();
         }
         else if (option == 2) {
-            //save_xlsx(analyzer,default_file_name(file, ".xlsx"));
-            //menu_start();
-            menu_save(analyzer, file); //tymczasowo
+            save_txt(analyzer,default_file_name(file, ".txt"), true);
+            menu_start();
         }
         else if (option == 3) {
             String file_name = my_file_name(".txt");
             if (!file_name.equals("")) {
-                save_txt(analyzer,file_name);
+                save_txt(analyzer,file_name, false);
                 menu_start();
             }
             else {
@@ -73,18 +72,14 @@ public class Main {
             }
         }
         else if (option == 4) {
-            /*
-            String file_name = my_file_name(".xlsx");
+            String file_name = my_file_name(".txt");
             if (!file_name.equals("")) {
-                save_txt(analyzer,file_name);
+                save_txt(analyzer,file_name, true);
                 menu_start();
             }
             else {
                 menu_save(analyzer, file);
             }
-
-             */
-            menu_save(analyzer, file); //tymczasowo
         }
         else {
             System.out.println("Niepoprawny znak!");
@@ -123,12 +118,7 @@ public class Main {
     }
 
     public static String default_file_name(File first_file, String format) {
-        if (format.equals(".xlsx")) {
-            return first_file.getParent() + "\\" + first_file.getName() + "_analized.xlsx";
-        }
-        else {
-            return first_file.getParent() + "\\" + first_file.getName() + "_analized.txt";
-        }
+        return first_file.getParent() + "\\" + first_file.getName() + "_analized" + format;
     }
 
     public static String my_file_name(String format) {
@@ -148,12 +138,35 @@ public class Main {
         return file_name;
     }
 
-    public static void save_txt(Analyzer analyzer, String file_name) throws IOException {
+    public static void save_txt(Analyzer analyzer, String file_name, boolean zip) throws IOException {
         File new_file = new File(file_name);
         FileWriter writer = new FileWriter(new_file);
         writer.write(analyzer.toString());
         writer.close();
+        if(zip) {
+            FileOutputStream fos = new FileOutputStream(file_name+"_zipped.zip");
+            ZipOutputStream out = new ZipOutputStream(fos);
+            FileInputStream fis = new FileInputStream(new_file);
+            ZipEntry zipEntry = new ZipEntry(new_file.getName());
+            out.putNextEntry(zipEntry);
+
+            byte[] bytes = new byte[1024];
+            int length;
+            while((length = fis.read(bytes)) >= 0) {
+                out.write(bytes, 0, length);
+            }
+            out.close();
+            fis.close();
+            fos.close();
+        }
     }
+
+    /*public static void save_xlsx(Analyzer analyzer, String file_name) {
+        File new_file = new File(file_name);
+        XSSFWorkbook workbook = new XSSFWorkbook(new_file);
+    }
+
+     */
 
     //save_xls
 

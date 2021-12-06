@@ -27,15 +27,17 @@ public class Analyzer {
             String[] line_tab = line.split(" ");
             for (String s : line_tab) {
                 s = s.replaceAll("[^a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]", "").toLowerCase();
-                boolean has_word = false;
-                for (Word w : analyzer.getWords()) {
-                    if (w.getWord_name().equals(s)) {
-                        has_word = true;
-                        w.setNumber();
+                if(!s.equals("")) {
+                    boolean has_word = false;
+                    for (Word w : analyzer.getWords()) {
+                        if (w.getWord_name().equals(s)) {
+                            has_word = true;
+                            w.setNumber();
+                        }
                     }
-                }
-                if (!has_word) {
-                    analyzer.getWords().add(new Word(s));
+                    if (!has_word) {
+                        analyzer.getWords().add(new Word(s));
+                    }
                 }
 
             }
