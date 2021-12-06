@@ -99,7 +99,7 @@ public class Main {
             System.out.println("Wielkosc tego pliku to: "+file.length()/(1024*1024)+ " MB");
             menu_start();
         }
-        else if (file.getName().length() < 4 || !file.getName().substring(file.getName().length() - 4).equals(".txt")) {
+        else if (file.getName().length() < 4 || !file.getName().endsWith(".txt")) {
             System.out.println("Nie znaleziono pliku tekstowego! Mozna analizowac pliki z rozszerzeniem .txt!");
             menu_start();
         }
@@ -127,7 +127,7 @@ public class Main {
         String file_name = "";
         try {
             file_name = scanner.nextLine();
-            if (file_name.length() < format.length() || !file_name.substring(file_name.length() - format.length()).equals(format)) {
+            if (file_name.length() < format.length() || !file_name.endsWith(format)) {
                 System.out.println("Wpisano zle rozszerzenie! Plik powinien miec rozszerzenie "+format+"!");
                 file_name = "";
             }
