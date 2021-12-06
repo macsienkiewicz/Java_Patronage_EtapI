@@ -20,7 +20,7 @@ public class Word implements Comparable<Word> {
         return number;
     }
 
-    public void setNumber() {
+    public void increaseNumber() {
         this.number = this.number + 1;
     }
 
