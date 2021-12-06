@@ -8,6 +8,8 @@ import java.util.zip.ZipOutputStream;
 
 public class Main {
 
+    //nie udalo mi sie zrobic testow jednostkowych, dlatego nie wstawiam do repozytorium zadnego pliku z klasami testow
+
     public static void main(String[] args) {
         menu_start();
 
